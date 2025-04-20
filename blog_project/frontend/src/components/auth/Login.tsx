@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Typography, Container, Box } from '@mui/material';
 import { login } from '../../services/api';
 import { LoginData } from '../../types';
+import { useAuth } from '../../context/AuthContext';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
+    const { login: authLogin } = useAuth();
     const [formData, setFormData] = useState<LoginData>({
         username: '',
         password: '',
@@ -23,8 +25,8 @@ const Login: React.FC = () => {
         e.preventDefault();
         try {
             const response = await login(formData);
-            localStorage.setItem('token', response.access);
-            localStorage.setItem('refreshToken', response.refresh);
+            authLogin(response.access);
+            localStorage.setItem('username', formData.username);
             navigate('/');
         } catch (err) {
             setError('Invalid credentials');

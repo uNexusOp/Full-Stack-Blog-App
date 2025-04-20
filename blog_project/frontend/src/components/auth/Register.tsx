@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Typography, Container, Box } from '@mui/material';
 import { register } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 const Register: React.FC = () => {
     const navigate = useNavigate();
+    const { login: authLogin } = useAuth();
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -25,8 +27,9 @@ const Register: React.FC = () => {
         setError('');
         
         try {
-            await register(formData);
-            navigate('/login');
+            const response = await register(formData);
+            authLogin(response.access);
+            navigate('/');
         } catch (err: any) {
             if (err.response?.data) {
                 setError(err.response.data);

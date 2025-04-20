@@ -4,7 +4,7 @@
 echo "Starting Django backend server..."
 cd blog_project/backend
 source venv/bin/activate
-python manage.py runserver 8000 &
+python3 manage.py runserver 8000 &
 BACKEND_PID=$!
 
 # Start the frontend server
